@@ -8,10 +8,8 @@ export const api = axios.create({
 });
 
 function clearAuthCookies() {
-  document.cookie =
-    "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax";
-  document.cookie =
-    "refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax";
+  document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax";
+  document.cookie = "refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax";
 }
 
 api.interceptors.response.use(
@@ -21,11 +19,7 @@ api.interceptors.response.use(
 
     if (status === 401) {
       try {
-        const refresh = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-          {},
-          { withCredentials: true },
-        );
+        const refresh = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, { withCredentials: true });
 
         if (refresh.status === 200) {
           return api(error.config);

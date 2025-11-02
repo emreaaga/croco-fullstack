@@ -12,7 +12,10 @@ export async function authMiddleware(req: NextRequest) {
 
   if (access) {
     try {
-      const { payload } = await jwtVerify(access, new TextEncoder().encode(process.env.JWT_SECRET!));
+      const { payload } = await jwtVerify(
+        access,
+        new TextEncoder().encode(process.env.JWT_SECRET!)
+      );
 
       if (pathname.startsWith("/dashboard/users") && payload.role !== "admin") {
         return NextResponse.redirect(new URL("/dashboard/forbidden", req.url));
@@ -22,7 +25,7 @@ export async function authMiddleware(req: NextRequest) {
     } catch {
       if (refresh) {
         const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
-          method: "POST",
+          method: "GET", // 👈 поменял тут
           credentials: "include",
           headers: { cookie: `refresh_token=${refresh}` },
         });

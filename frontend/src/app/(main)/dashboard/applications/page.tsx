@@ -50,9 +50,8 @@ export default function ApplicationsPage() {
         }
       } catch (err: any) {
         if (err.response?.status === 401) {
-          api.post("/auth/logout");
           toast.info("Сессия истекла. Войдите снова.");
-          router.replace("/dashboard/login");
+          router.replace("/auth/login");
         } else {
           console.error("Ошибка запроса:", err);
         }

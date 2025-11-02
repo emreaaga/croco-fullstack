@@ -1,4 +1,5 @@
 "use client";
+import { Loader2 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 
@@ -12,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/axios";
+import React from "react";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Пожалуйста введите валидную почту." }),
@@ -29,9 +31,11 @@ export function LoginForm() {
       remember: false,
     },
   });
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
+      setIsLoading(true);
       await api.post("/auth/login", {
         email: data.email,
         password: data.password,
@@ -39,11 +43,9 @@ export function LoginForm() {
       toast.success("Успешный вход!");
       router.replace("/dashboard/default");
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Произошла ошибка. Повторите позже!");
-      }
+      toast.error(error.response?.data?.message || "Произошла ошибка. Повторите позже!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,8 +103,15 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white" type="submit">
-          Войти
+        <Button className="w-full bg-emerald-600 text-white hover:bg-emerald-700" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Входим...
+            </>
+          ) : (
+            "Войти"
+          )}
         </Button>
       </form>
     </Form>

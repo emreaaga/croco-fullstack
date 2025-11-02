@@ -4,11 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/axios";
+import React from "react";
 
 const FormSchema = z
   .object({
@@ -32,9 +34,11 @@ export function RegisterForm() {
       confirmPassword: "",
     },
   });
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
+      setIsLoading(true);
       await api.post("/auth/register", {
         name: data.name,
         email: data.email,
@@ -49,6 +53,8 @@ export function RegisterForm() {
       } else {
         toast.error("Произошла ошибка при регистрации. Попробуйте снова.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,8 +123,15 @@ export function RegisterForm() {
           )}
         />
 
-        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white" type="submit">
-          Зарегистрироваться
+        <Button className="w-full bg-emerald-600 text-white hover:bg-emerald-700" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Регистрация...
+            </>
+          ) : (
+            "Зарегистрироваться"
+          )}
         </Button>
       </form>
     </Form>

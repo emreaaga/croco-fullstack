@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useUser } from "@/context/user-context";
+import { useUser } from "@/config/user-context";
 import { Pencil, Save, X, MailCheck, MailWarning, Loader2 } from "lucide-react";
 import { apiServer } from "@/lib/api-server";
 import { toast } from "sonner";

@@ -2,7 +2,14 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, flexRender, SortingState } from "@tanstack/react-table";
+import {
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  flexRender,
+  SortingState,
+} from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { api } from "@/lib/axios";
@@ -25,13 +32,8 @@ export default function UsersPage() {
         toast.error("Не удалось обновить статус.");
       }
     } catch (err: any) {
-      if (err.response?.status === 401) {
-        toast.info("Сессия истекла. Войдите снова.");
-        router.replace("/auth/login");
-      } else {
-        console.error(err);
-        toast.error("Ошибка при изменении статуса");
-      }
+      toast.error("Ошибка при загрузке пользователей.");
+      router.replace("/auth/login");
     }
   };
 

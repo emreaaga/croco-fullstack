@@ -3,28 +3,51 @@ import { jwtVerify } from "jose";
 
 export async function authMiddleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const token = req.cookies.get("access_token")?.value;
+  const access = req.cookies.get("access_token")?.value;
+  const refresh = req.cookies.get("refresh_token")?.value;
 
-  // --- неавторизованный пользователь ---
-  if (!token && pathname.startsWith("/dashboard")) {
+  if (pathname.startsWith("/dashboard") && !access && !refresh) {
     return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 
-  // --- залогинен, но пытается попасть на login/register ---
-  if (token && (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register"))) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
-  }
-
-  // --- проверка роли, если нужно ---
-  if (token && pathname.startsWith("/dashboard/users")) {
+  if (access) {
     try {
-      const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
-      console.log(payload.role);
-      if (payload.role !== "admin") {
+      const { payload } = await jwtVerify(access, new TextEncoder().encode(process.env.JWT_SECRET!));
+
+      if (pathname.startsWith("/dashboard/users") && payload.role !== "admin") {
         return NextResponse.redirect(new URL("/dashboard/forbidden", req.url));
       }
+
+      return NextResponse.next();
     } catch {
-      return NextResponse.redirect(new URL("/auth/login", req.url));
+      if (refresh) {
+        const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+          method: "POST",
+          credentials: "include",
+          headers: { cookie: `refresh_token=${refresh}` },
+        });
+
+        if (refreshRes.ok) return NextResponse.next();
+
+        const res = NextResponse.redirect(new URL("/auth/login", req.url));
+        res.cookies.set("access_token", "", { expires: new Date(0), path: "/" });
+        res.cookies.set("refresh_token", "", { expires: new Date(0), path: "/" });
+        return res;
+      } else {
+        const res = NextResponse.redirect(new URL("/auth/login", req.url));
+        res.cookies.set("access_token", "", { expires: new Date(0), path: "/" });
+        res.cookies.set("refresh_token", "", { expires: new Date(0), path: "/" });
+        return res;
+      }
+    }
+  }
+
+  if (pathname.startsWith("/auth") && access) {
+    try {
+      await jwtVerify(access, new TextEncoder().encode(process.env.JWT_SECRET!));
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    } catch {
+      return NextResponse.next();
     }
   }
 

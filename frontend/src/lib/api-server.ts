@@ -4,11 +4,14 @@ export async function apiServer(path: string, options: RequestInit = {}) {
   const res = await fetch(`${baseURL}${path}`, {
     ...options,
     cache: "no-store",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
   });
+
+  if (res.status === 401) return new Response(null, { status: 401 });
 
   return res;
 }

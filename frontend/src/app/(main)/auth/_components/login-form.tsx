@@ -40,12 +40,12 @@ export function LoginForm() {
         email: data.email,
         password: data.password,
       });
-      toast.success("Успешный вход!");
       router.replace("/dashboard/default");
+      setIsLoading(false);
+      toast.success("Успешный вход!");
+      
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Произошла ошибка. Повторите позже!");
-    } finally {
-      setIsLoading(false);
     }
   };
 

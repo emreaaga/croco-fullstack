@@ -14,7 +14,7 @@ class JwtService {
     return jwt.sign({ id }, this.refreshSecret, { expiresIn: '7d' });
   }
   createEmailToken(id, email) {
-    return jwt.sign({ id, email }, this.emailSecret, { expiresIn: '5m' });
+    return jwt.sign({ id, email }, this.emailSecret, { expiresIn: '3m' });
   }
   verifyAccess(accessToken) {
     return this.#verify(accessToken, this.jwtSecret);

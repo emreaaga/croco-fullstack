@@ -6,9 +6,8 @@ export const authMiddleware = async (request, response, next) => {
   if (!token) throw new UnauthorizedError('Not authenticated.');
 
   const encoded = jwtService.verifyAccess(token);
-  if (!encoded?.id) {
-    throw new UnauthorizedError('Invalid token payload.');
-  }
+  if (!encoded?.id) throw new UnauthorizedError('Invalid token payload.');
+
   request.userId = encoded.id;
   request.userRole = encoded.role;
   next();

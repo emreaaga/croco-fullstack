@@ -46,7 +46,6 @@ class AuthService {
     const [user] = await userRepository.findById(userId);
     if (!user) throw new NotFoundError('User not found');
     delete user.password;
-    delete user.is_email_verifed;
     return user;
   }
   async logOut(userId) {

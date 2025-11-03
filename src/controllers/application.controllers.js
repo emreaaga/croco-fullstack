@@ -13,7 +13,7 @@ export const createApplicationController = async (request, response) => {
 };
 
 /**
- * Get paginated applications.
+ * Get paginated list of applications.
  */
 export const getApplicationsController = async (request, response) => {
   const { data, pagination } = await applicationService.getAll(request.validatedData);

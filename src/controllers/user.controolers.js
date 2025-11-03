@@ -13,3 +13,8 @@ export const changeUserStatusController = async (request, response) => {
   await userService.updateStatus(request?.validatedData?.status, Number(request.params?.id));
   return response.status(200).json({ success: true, message: 'User status updated successfully.' });
 };
+
+export const deleteUserController = async (request, response) => {
+  await userService.delete(Number(request.params.id));
+  return response.status(200).json({ success: true, message: 'Deleted successfully.' });
+};

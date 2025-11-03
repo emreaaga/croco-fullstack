@@ -4,7 +4,7 @@ import {
   getApplicationsController,
   deleteApplicationController,
 } from '../controllers/application.controllers.js';
-import { handleValidate, authMiddleware } from '../middlewares/index.js';
+import { handleValidate, authMiddleware, isAdminMiddleware } from '../middlewares/index.js';
 import { PaginateValidation, ApplicationSchema } from '../validations/index.js';
 import { createApplicatonLimiter } from '../config/rateLimiter.js';
 
@@ -22,6 +22,6 @@ router.get(
   handleValidate(PaginateValidation, true),
   getApplicationsController
 );
-router.delete('/:id', authMiddleware, deleteApplicationController);
+router.delete('/:id', authMiddleware, isAdminMiddleware, deleteApplicationController);
 
 export default router;

@@ -93,6 +93,11 @@ class UserRepository {
       .set({ is_email_verifed: true, updatedAt: sql`NOW()` })
       .where(eq(UserTable.id, userId));
   }
+
+  async deleteOne(userId) {
+    const [deleted] = await this.db.delete(UserTable).where(eq(UserTable.id, userId)).returning();
+    return deleted;
+  }
 }
 
 export const userRepository = new UserRepository(db);

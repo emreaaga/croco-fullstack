@@ -27,6 +27,11 @@ class UserService {
 
     return result;
   }
+
+  async delete(userId) {
+    const result = await userRepository.deleteOne(userId);
+    if (!result) throw new BadRequestError('User not found.');
+  }
 }
 
 export const userService = new UserService();

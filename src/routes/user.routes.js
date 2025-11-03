@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  getUsersController,
-  changeUserStatusController,
-  deleteUserController,
-} from '../controllers/user.controolers.js';
+import { getUsers, updateUserStatus, deleteUser } from '../controllers/user.controolers.js';
 import { authMiddleware, handleValidate, isAdminMiddleware } from '../middlewares/index.js';
 import { PaginateValidation, UserPatchSchema } from '../validations/index.js';
 
@@ -13,15 +9,15 @@ router.get(
   authMiddleware,
   isAdminMiddleware,
   handleValidate(PaginateValidation, true),
-  getUsersController
+  getUsers
 );
 router.patch(
   '/:id',
   authMiddleware,
   isAdminMiddleware,
   handleValidate(UserPatchSchema),
-  changeUserStatusController
+  updateUserStatus
 );
-router.delete('/:id', authMiddleware, isAdminMiddleware, deleteUserController);
+router.delete('/:id', authMiddleware, isAdminMiddleware, deleteUser);
 
 export default router;

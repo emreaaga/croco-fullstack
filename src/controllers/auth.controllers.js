@@ -4,7 +4,7 @@ import { setAuthCookies, clearAuthCookies } from '../utils/cookie.js';
 /**
  * Register a new user account.
  */
-export const registerController = async (request, response) => {
+export const register = async (request, response) => {
   const result = await authService.register(request?.validatedData);
 
   return response.status(201).json({
@@ -17,7 +17,7 @@ export const registerController = async (request, response) => {
 /**
  * Authenticate user and create a session.
  */
-export const loginController = async (request, response) => {
+export const login = async (request, response) => {
   const { access_token, refresh_token } = await authService.login(request.validatedData);
   setAuthCookies(response, access_token, refresh_token);
 
@@ -27,7 +27,7 @@ export const loginController = async (request, response) => {
 /**
  * Get current authenticated user data.
  */
-export const getMeController = async (request, response) => {
+export const getMe = async (request, response) => {
   const user = await authService.getMe(request.userId);
   return response.status(200).json({ success: true, user: user });
 };
@@ -35,7 +35,7 @@ export const getMeController = async (request, response) => {
 /**
  * Log out user and clear authentication cookies.
  */
-export const logOutController = async (request, response) => {
+export const logout = async (request, response) => {
   await authService.logOut(request.userId);
   clearAuthCookies(response);
   return response.status(200).json({
@@ -47,7 +47,7 @@ export const logOutController = async (request, response) => {
 /**
  * Change user's password and invalide current session.
  */
-export const changePasswordController = async (request, response) => {
+export const changePassword = async (request, response) => {
   await authService.changePassword(request.validatedData, request.userId);
   clearAuthCookies(response);
 
@@ -57,7 +57,7 @@ export const changePasswordController = async (request, response) => {
 /**
  * Send email verification link containing a JWT token.
  */
-export const sendVerificationController = async (request, response) => {
+export const sendVerification = async (request, response) => {
   await authService.sendVerification(request.userId);
 
   return response.status(200).json({ success: true, message: 'Link sent!' });
@@ -66,7 +66,7 @@ export const sendVerificationController = async (request, response) => {
 /**
  * Verify user's email address using verification(JWT) token.
  */
-export const verifyEmailController = async (request, response) => {
+export const verifyEmail = async (request, response) => {
   await authService.verifyEmail(request.query?.token);
 
   return response.status(200).json({ success: true, message: 'Email verified!' });
@@ -75,7 +75,7 @@ export const verifyEmailController = async (request, response) => {
 /**
  * Refresh user's access token using refresh token.
  */
-export const refreshTokenController = async (request, response) => {
+export const refreshToken = async (request, response) => {
   const accessToken = await authService.refreshToken(request.cookies?.refresh_token);
   setAuthCookies(response, accessToken, request.cookies?.refresh_token);
 

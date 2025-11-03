@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 
 import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -45,11 +47,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   }
 
   if (!user) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <p className="text-sm text-muted-foreground">Проверка авторизации...</p>
-      </div>
-    );
+    redirect("/auth/login");
   }
 
   const [sidebarVariant, sidebarCollapsible, contentLayout, navbarStyle] = await Promise.all([

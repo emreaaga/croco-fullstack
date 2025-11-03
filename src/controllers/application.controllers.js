@@ -17,3 +17,8 @@ export const getApplicationsController = async (request, response) => {
     pagination,
   });
 };
+
+export const deleteApplicationController = async (request, response) => {
+  await applicationService.delete(Number(request.params.id));
+  return response.status(200).json({ success: true, message: 'Deleted successfully.' });
+};

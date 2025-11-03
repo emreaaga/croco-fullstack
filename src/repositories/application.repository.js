@@ -1,4 +1,5 @@
 import { desc, count } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { ApplicationTable } from '../models/application.model.js';
 import { db } from '../config/db.js';
@@ -39,6 +40,14 @@ class ApplicationRepository {
       data,
       pagination: { total, totalPages, hasNext, page, page_size },
     };
+  }
+
+  async deleteOne(appId) {
+    const [deleted] = await this.db
+      .delete(ApplicationTable)
+      .where(eq(ApplicationTable.id, appId))
+      .returning();
+    return deleted;
   }
 }
 

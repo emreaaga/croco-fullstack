@@ -7,7 +7,9 @@ import { createApplicatonLimiter } from '../config/rateLimiter.js';
 const router = Router();
 
 router.post('/', createApplicatonLimiter, handleValidate(ApplicationSchema), createApp);
+
 router.get('/', authMiddleware, handleValidate(PaginateValidation, true), getApps);
+
 router.delete('/:id', authMiddleware, isAdminMiddleware, deleteApp);
 
 export default router;

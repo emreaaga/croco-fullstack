@@ -4,6 +4,9 @@ import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import path from 'path';
 
 import { applicationRouter, authRouter, userRouter } from './routes/index.js';
 import { globalLimiter, config } from './config/index.js';
@@ -24,9 +27,13 @@ app.use(helmet());
 app.use(compression());
 app.use(globalLimiter);
 
+const swaggerPath = path.join(process.cwd(), 'src/docs/application.yaml');
+const swaggerDocument = YAML.load(swaggerPath);
+
 app.use('/api/applications', applicationRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Error handler
 app.use(globalErrorHandler);

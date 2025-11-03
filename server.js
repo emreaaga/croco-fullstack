@@ -9,7 +9,7 @@ async function startServer() {
       console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.log(error);
+    console.log('❌ Server failed to start:', error);
   }
 }
 

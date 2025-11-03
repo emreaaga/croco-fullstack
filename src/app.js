@@ -6,15 +6,15 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 import { applicationRouter, authRouter, userRouter } from './routes/index.js';
-import { globalLimiter } from './config/rateLimiter.js';
+import { globalLimiter, config } from './config/index.js';
 import { globalErrorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 app.use(morgan('dev'));
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    methods: ['GET', 'POST', 'PATCH'],
+    origin: config.db.clientUrl,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   })
 );

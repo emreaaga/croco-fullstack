@@ -1,5 +1,5 @@
 import { userRepository, tokenRepository } from '../repositories/index.js';
-import { transporter } from '../config/mailer.js';
+import { config, transporter } from '../config/index.js';
 import {
   BadRequestError,
   NotFoundError,
@@ -69,7 +69,7 @@ class AuthService {
     if (user.is_email_verifed) throw new BadRequestError('User email already verified.');
 
     const token = jwtService.createEmailToken(user.id, user.email);
-    const verifyUrl = `${process.env.API_BASE_URL}/auth/verify-email?token=${token}`;
+    const verifyUrl = `${config.email.emailFrom}/auth/verify-email?token=${token}`;
 
     await transporter.sendMail({
       from: '"Crocodile Pay" <noreply@crocodile-pay.uz>',

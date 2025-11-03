@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError, BadRequestError } from './index.js';
+import { config } from '../config/index.js';
 
 class JwtService {
   constructor({ jwtSecret, refreshSecret, emailSecret }) {
@@ -8,13 +9,19 @@ class JwtService {
     this.emailSecret = emailSecret;
   }
   createAccessToken(id, email, role) {
-    return jwt.sign({ id, email, role }, this.jwtSecret, { expiresIn: '30m' });
+    return jwt.sign({ id, email, role }, this.jwtSecret, {
+      expiresIn: `${config.jwt.jwtAccessExpiration}m`,
+    });
   }
   createRefreshToken(id) {
-    return jwt.sign({ id }, this.refreshSecret, { expiresIn: '7d' });
+    return jwt.sign({ id }, this.refreshSecret, {
+      expiresIn: `${config.jwt.jwtRefreshExpiration}d`,
+    });
   }
   createEmailToken(id, email) {
-    return jwt.sign({ id, email }, this.emailSecret, { expiresIn: '3m' });
+    return jwt.sign({ id, email }, this.emailSecret, {
+      expiresIn: `${config.jwt.jwtEmailExpiration}m`,
+    });
   }
   verifyAccess(accessToken) {
     return this.#verify(accessToken, this.jwtSecret);
@@ -37,7 +44,7 @@ class JwtService {
 }
 
 export const jwtService = new JwtService({
-  jwtSecret: process.env.JWT_SECRET,
-  refreshSecret: process.env.REFRESH_SECRET,
-  emailSecret: process.env.EMAIL_SECRET,
+  jwtSecret: config.jwt.jwtSecret,
+  refreshSecret: config.jwt.refreshSecret,
+  emailSecret: config.jwt.emailSecret,
 });

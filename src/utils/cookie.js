@@ -1,9 +1,11 @@
-const isProd = process.env.NODE_ENV === 'production';
+import { config } from '../config/index.js';
+
+const isProd = config.app.env === 'production';
 
 const cookieOptions = {
   access: {
     httpOnly: true,
-    maxAge: 15 * 60 * 1000,
+    maxAge: config.jwt.jwtAccessExpiration * 60 * 1000,
     path: '/',
     domain: isProd ? '.crocodile-pay.uz' : undefined,
     secure: isProd,
@@ -11,7 +13,7 @@ const cookieOptions = {
   },
   refresh: {
     httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: config.jwt.jwtRefreshExpiration * 24 * 60 * 60 * 1000,
     path: '/',
     domain: isProd ? '.crocodile-pay.uz' : undefined,
     secure: isProd,

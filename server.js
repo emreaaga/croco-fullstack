@@ -1,8 +1,7 @@
 import app from './src/app.js';
-import dotenv from 'dotenv';
+import { config } from './src/config/index.js';
 
-dotenv.config();
-const PORT = process.env.PORT || 4000;
+const PORT = config.app.port;
 
 async function startServer() {
   try {

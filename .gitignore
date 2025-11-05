@@ -1,41 +1,57 @@
-# Node
+# =========================
+# Node / PNPM
+# =========================
 node_modules/
+.pnpm-store/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 package-lock.json
+yarn.lock
 
-# Env files
+# =========================
+# Env / Secrets
+# =========================
 .env
 
-.drizzle
-# Logs
-logs
-*.log
-logs/*.log
-
-# OS stuff
-.DS_Store
-Thumbs.db
-
-# IDEs / Editors
-.vscode/
-.idea/
-*.swp
-
-# Build / output
+# =========================
+# Build & Output
+# =========================
 dist/
 build/
 coverage/
 .tmp/
 .cache/
 
-# PM2 logs
+# =========================
+# Logs
+# =========================
+logs
+*.log
+logs/*.log
 pids
 *.pid
 *.seed
 *.pid.lock
 
-# Other
+# =========================
+# Drizzle
+# =========================
+.drizzle/
+drizzle/
+*.db
+
+# =========================
+# OS / Editor Files
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# =========================
+# Archives
+# =========================
 *.tgz

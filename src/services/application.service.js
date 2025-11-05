@@ -12,11 +12,11 @@ class ApplicationService {
    * @param {string} data.name - User's name
    * @param {string} data.siteUrl - Website URL
    * @param {string} data.phoneNumber - User's phone number
-   * @returns {Promise<Object>} Created application object
+   * @returns {Promise<appId: number>}
    */
   async create(data) {
-    const result = await applicationRepository.create(data);
-    return result;
+    const appId = await applicationRepository.create(data);
+    return appId.id;
   }
 
   /**

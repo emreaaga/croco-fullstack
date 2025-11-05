@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - bcrypt
+  - es5-ext
+  - esbuild
+  - unrs-resolver

@@ -46,7 +46,7 @@ export const config = {
   },
   db: {
     dbUrl: env.DATABASE_URL,
-    clientUrl: env.API_BASE_URL,
+    clientUrl: env.CLIENT_URL,
   },
   email: {
     emailFrom: env.API_BASE_URL,

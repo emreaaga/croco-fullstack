@@ -10,6 +10,7 @@ router.post('/', createApplicatonLimiter, handleValidate(ApplicationSchema), cre
 
 router.get('/', authMiddleware, handleValidate(PaginateValidation, true), getApps);
 
+//VALIDATE!
 router.delete('/:id', authMiddleware, isAdminMiddleware, deleteApp);
 
 export default router;

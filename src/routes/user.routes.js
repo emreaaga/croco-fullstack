@@ -11,6 +11,7 @@ router.get(
   handleValidate(PaginateValidation, true),
   getUsers
 );
+//VALIDATE!
 router.patch(
   '/:id',
   authMiddleware,
@@ -18,6 +19,7 @@ router.patch(
   handleValidate(UserPatchSchema),
   updateUserStatus
 );
+//VALIDATE!
 router.delete('/:id', authMiddleware, isAdminMiddleware, deleteUser);
 
 export default router;

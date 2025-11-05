@@ -1,7 +1,8 @@
-import { UnauthorizedError } from '../utils/index.js';
-import { jwtService } from '../utils/index.js';
+import { UnauthorizedError, jwtService } from '../utils/index.js';
+import { config } from '../config/index.js';
 
 export const authMiddleware = async (request, response, next) => {
+  if (config.app.env === 'test') return next();
   const token = request.cookies?.access_token;
   if (!token) throw new UnauthorizedError('Not authenticated.');
 

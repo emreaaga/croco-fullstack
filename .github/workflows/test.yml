@@ -24,6 +24,8 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 5
+    env:
+      DATABASE_URL: postgresql://test:test@localhost:5432/crocotest
 
     steps:
       - name: Checkout repository
@@ -43,10 +45,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Prepare environment variables
-        run: | 
-          cp .env.example .env
-          echo "DATABASE_URL=postgres://test:test@localhost:5432/crocotest" << .env
-      
+        run: cp .env.example .env
+
       - name: Run migrations
         run: pnpm drizzle-kit push
 

@@ -33,6 +33,7 @@ router.post(
   changePassword
 );
 router.post('/send-verification', emailLimiter, authMiddleware, sendVerification);
+//VALIDATE!
 router.get('/verify-email', verifyEmailLimiter, verifyEmail);
 router.get('/refresh', refreshToken);
 

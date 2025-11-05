@@ -10,6 +10,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: crocotest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready -U test
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,8 +42,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Copy env file
-        run: cp .env.example .env
+      - name: Prepare environment variables
+        run: | 
+          cp .env.example .env
+          echo "DATABASE_URL=postgres://test:test@localhost:5432/crocotest" << .env
+      
+      - name: Run migrations
+        run: pnpm drizzle-kit push
 
       - name: Run tests
         run: pnpm test

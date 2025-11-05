@@ -27,5 +27,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Copy env file
+        run: cp .env.example .env
+
       - name: Run tests
         run: pnpm test

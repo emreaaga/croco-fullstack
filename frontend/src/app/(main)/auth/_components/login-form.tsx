@@ -43,8 +43,8 @@ export function LoginForm() {
       router.replace("/dashboard/default");
       setIsLoading(false);
       toast.success("Успешный вход!");
-      
     } catch (error: any) {
+      setIsLoading(false);
       toast.error(error.response?.data?.message || "Произошла ошибка. Повторите позже!");
     }
   };

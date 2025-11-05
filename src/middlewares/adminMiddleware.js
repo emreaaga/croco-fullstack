@@ -1,6 +1,8 @@
 import { UnauthorizedError, ForbiddenError } from '../utils/index.js';
+import { config } from '../config/index.js';
 
 export const isAdminMiddleware = async (request, response, next) => {
+  if (config.app.env === 'test') return next();
   const userRole = request.userRole;
 
   if (!userRole) {

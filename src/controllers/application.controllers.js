@@ -4,12 +4,10 @@ import { applicationService } from '../services/index.js';
  * Handle creation of a new application.
  */
 export const createApp = async (request, response) => {
-  const result = await applicationService.create(request.validatedData);
-  return response.status(201).json({
-    success: true,
-    message: 'Application created successfully.',
-    data: result,
-  });
+  const id = await applicationService.create(request.validatedData);
+  return response
+    .status(201)
+    .json({ success: true, message: 'Application created successfully.', id });
 };
 
 /**

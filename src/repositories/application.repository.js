@@ -10,14 +10,11 @@ class ApplicationRepository {
   }
 
   async create(data) {
-    return await this.db
+    const [created] = await this.db
       .insert(ApplicationTable)
       .values({ ...data })
-      .returning({
-        id: ApplicationTable.id,
-        name: ApplicationTable.name,
-        phoneNumber: ApplicationTable.phoneNumber,
-      });
+      .returning({ id: ApplicationTable.id });
+    return created;
   }
 
   async findAll(page = 1, page_size = 4) {

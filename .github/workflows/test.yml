@@ -48,7 +48,7 @@ jobs:
           echo "DATABASE_URL=postgres://test:test@localhost:5432/crocotest" << .env
       
       - name: Run migrations
-        run: pnpm drizzle-kit push
+        run: pnpm drizzle-kit migrate
 
       - name: Run tests
         run: pnpm test

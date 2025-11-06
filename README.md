@@ -1,11 +1,5 @@
 <a id="readme-top"></a>
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![License][license-shield]][license-url]
-
 <br />
 <div align="center">
   <h3 align="center">⚡ Fullstack Admin Dashboard</h3>
@@ -18,28 +12,67 @@
 
 ---
 
+<div align="center">
+
 ## 🧩 About The Project
 
-Fullstack Admin Dashboard is a secure fullstack web app with user authentication, role-based access control, and REST API integration.
+Fullstack Admin Dashboard — secure fullstack app with:
+
+🔐 JWT auth (HTTP-only cookies) &nbsp;•&nbsp; 🧾 RBAC (admin/user) &nbsp;•&nbsp; 🧠 Validation & PostgreSQL &nbsp;•&nbsp; 🧪 Integration tests (Jest + Supertest)
+
+</div>
+
+<div align="center">
+
+## 🛠 Built With
+
+</div>
+
+<div align="center">
+
+<!-- Core -->
+
+<a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=fff&style=for-the-badge" /></a>
+<a href="https://expressjs.com/"><img src="https://img.shields.io/badge/Express-000?logo=express&logoColor=fff&style=for-the-badge" /></a>
+<a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=fff&style=for-the-badge" /></a>
+<a href="https://orm.drizzle.team/"><img src="https://img.shields.io/badge/Drizzle%20ORM-0b3?style=for-the-badge" /></a>
+
+<!-- Auth / Validation / Security -->
+<img src="https://img.shields.io/badge/JSON%20Web%20Token-000?logo=jsonwebtokens&logoColor=fff&style=for-the-badge" />
+<img src="https://img.shields.io/badge/Zod-3b82f6?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Helmet-111?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Rate%20Limit-444?style=for-the-badge" />
+<img src="https://img.shields.io/badge/bcrypt-121212?style=for-the-badge" />
+
+<!-- HTTP / Utils -->
+<img src="https://img.shields.io/badge/cookie--parser-555?style=for-the-badge" />
+<img src="https://img.shields.io/badge/cors-555?style=for-the-badge" />
+<img src="https://img.shields.io/badge/compression-555?style=for-the-badge" />
+<img src="https://img.shields.io/badge/morgan-555?style=for-the-badge" />
+<img src="https://img.shields.io/badge/dotenv-555?style=for-the-badge" />
+<img src="https://img.shields.io/badge/nodemailer-2a8?style=for-the-badge" />
+
+<!-- DX / Tests -->
+
+<a href="https://jestjs.io/"><img src="https://img.shields.io/badge/Jest-C21325?logo=jest&logoColor=fff&style=for-the-badge" /></a>
+<a href="https://github.com/ladjs/supertest"><img src="https://img.shields.io/badge/Supertest-000?style=for-the-badge" /></a>
+<img src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=for-the-badge" />
+<img src="https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=000&style=for-the-badge" />
+<img src="https://img.shields.io/badge/drizzle--kit-0b3?style=for-the-badge" />
+
+</div>
+<div align="center">
 
 - 🔐 JWT authentication (HTTP-only cookies)
 - 🧾 Role-based access control (admin / user)
 - 🧠 Backend validation & PostgreSQL integration
 - 🧩 Integration tests with Jest + Supertest
-
-### Built With
-
-- [![Node.js][Node.js]][Node-url]
-- [![Next.js][Next.js]][Next-url]
-- [![PostgreSQL][Postgres]][Postgres-url]
-- [![TailwindCSS][Tailwind]][Tailwind-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
+  
+</div>
 
 ## ⚙️ Getting Started
 
+<div align="center">
 ### Prerequisites
 
 Install **pnpm** globally (backend uses it):
@@ -78,6 +111,8 @@ cd frontend
 npm install
 npm run dev
 ```
+
+</div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

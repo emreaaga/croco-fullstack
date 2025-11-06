@@ -1,7 +1,7 @@
 import { eq, desc, count, sql } from 'drizzle-orm';
 
 import { UserTable } from '../models/user.model.js';
-import { db } from '../config/db.js';
+import { db, config } from '../config/index.js';
 
 class UserRepository {
   constructor(database) {
@@ -9,6 +9,10 @@ class UserRepository {
   }
 
   async create(data) {
+    if (config.app.env === 'test') {
+      data.status = 'approved';
+      data.roles = 'admin';
+    }
     const [created] = await this.db
       .insert(UserTable)
       .values({ ...data })

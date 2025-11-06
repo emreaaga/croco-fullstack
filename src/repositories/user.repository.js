@@ -9,7 +9,7 @@ class UserRepository {
   }
 
   async create(data) {
-    return await this.db
+    const [created] = await this.db
       .insert(UserTable)
       .values({ ...data })
       .returning({
@@ -17,6 +17,7 @@ class UserRepository {
         name: UserTable.name,
         email: UserTable.email,
       });
+    return created;
   }
 
   async findByEmail(email) {

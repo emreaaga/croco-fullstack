@@ -116,6 +116,7 @@ class AuthService {
     if (!match) throw new BadRequestError('Incorect current password');
     const hashedPassword = await hashService.hashPassword(password);
     await userRepository.updatePassword(user.id, hashedPassword);
+    await tokenRepository.deleteByUserId(user.id);
   }
 
   /**
@@ -157,7 +158,8 @@ class AuthService {
     const [user] = await userRepository.findById(encoded.id);
     if (!user) throw new NotFoundError('User not found.');
     if (user.is_email_verifed) throw new BadRequestError('User email already verified.');
-    if (encoded.email !== user.email) throw new BadRequestError('Token email doesn’t match user email');
+    if (encoded.email !== user.email)
+      throw new BadRequestError('Token email doesn’t match user email');
 
     await userRepository.updateEmailStatus(user.id);
   }

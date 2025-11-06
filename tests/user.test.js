@@ -9,6 +9,7 @@ describe('User API', () => {
   });
 
   let userId;
+  const statuses = ['approved', 'rejected'];
 
   test('POST /auth/register -> register user', async () => {
     const newUser = {
@@ -59,6 +60,16 @@ describe('User API', () => {
       page: expect.any(String),
       page_size: expect.any(String),
     });
+  });
+
+  test.each(statuses)(`PATCH /api/users/${userId} -> should update status to %s`, async status => {
+    const res = await request(app)
+      .patch(`/api/users/${userId}`)
+      .send({ status })
+      .set('Accept', 'application/json');
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
   });
 
   test(`DELETE /api/users/${userId} -> should delete a user successfully`, async () => {

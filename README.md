@@ -1,142 +1,106 @@
-<a id="readme-top"></a>
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![License][license-shield]][license-url]
-
-<br />
 <div align="center">
-  <h3 align="center">⚡ Fullstack Admin Dashboard</h3>
-  <p align="center">
-    Secure admin panel with authentication, RBAC, and REST API.
-    <br />
-    <a href="#getting-started"><strong>Get Started »</strong></a>
-  </p>
+
+# ⚡ Fullstack Admin Dashboard
+
+Secure admin panel featuring **JWT authentication**, **Role-Based Access Control (RBAC)**, and a clean **REST API**.
+
+**Auth:** HTTP-only cookies | **DB:** PostgreSQL (Drizzle ORM) | **Validation:** Zod | **Tests:** Jest + Supertest
+
+<br>
+
+### 🖼️ Preview
+
+| Login Page                        | Dashboard                                 | Users Table                       |
+| --------------------------------- | ----------------------------------------- | --------------------------------- |
+| ![Login](./screenshots/login.png) | ![Dashboard](./screenshots/dashboard.png) | ![Users](./screenshots/users.png) |
+
 </div>
 
 ---
 
-## 🧩 About The Project
+## 🧩 About
 
-Fullstack Admin Dashboard is a secure fullstack web app with user authentication, role-based access control, and REST API integration.
+_This is a concise fullstack admin application with the following key features:_
 
-- 🔐 JWT authentication (HTTP-only cookies)
-- 🧾 Role-based access control (admin / user)
-- 🧠 Backend validation & PostgreSQL integration
-- 🧩 Integration tests with Jest + Supertest
-
-### Built With
-
-- [![Node.js][Node.js]][Node-url]
-- [![Next.js][Next.js]][Next-url]
-- [![PostgreSQL][Postgres]][Postgres-url]
-- [![TailwindCSS][Tailwind]][Tailwind-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- Authentication via JWT stored in **HTTP-only cookies**
+- Role-Based Access Control (**admin / user**)
+- Typed validation (**Zod**) for all routes
+- Security middleware (Helmet, rate-limit, CORS, compression)
+- Robust integration tests using **Jest + Supertest**
 
 ---
+
+## 🧰 Tech Stack
+
+**Backend:**
+
+- Node.js (Express)
+- PostgreSQL + Drizzle ORM
+- Zod (validation)
+- Jest + Supertest (testing)
+- pnpm (package manager)
+
+**Frontend:**
+
+- React + Vite
+- TypeScript
+- Tailwind CSS + Shadcn(UI library)
+- Axios
+- React Router
+
+**DevOps / Tools:**
+
+- Docker
+- ESLint + Prettier
+- GitHub Actions (optional CI/CD)
 
 ## ⚙️ Getting Started
 
-### Prerequisites
+> The backend uses **pnpm**.
 
-Install **pnpm** globally (backend uses it):
+### 🪜 Prerequisites
 
-```bash
-npm install -g pnpm
-```
+`npm i -g pnpm`
+Installation and Setup
 
-### Installation
-
-1. **Clone the repo:**
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/emreaaga/croco-fullstack.git
-cd croco-fullstack
+1.1) git clone [https://github.com/emreaaga/croco-fullstack.git](https://github.com/emreaaga/croco-fullstack.git)
+1.2) cd croco-fullstack
 ```
 
-2. **Backend setup:**
+2. Backend Setup & Run:
 
-```bash
-pnpm install
-pnpm dev
+```bsh
+2.1) pnpm install
+2.2) pnpm dev
 ```
 
-3. **Create .env file:**
+3. Environment Variables:
+   `cp .env.example .env` - Set your own values in the newly created .env file.
 
-```bash
-cp .env.example .env
-# set up your configuration
-```
-
-4. **Frontend setup:**
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
+4. Frontend Setup (Optional):
+   4.1) `cd frontend` 4.2) `npm install` 4.3) `npm run dev`
 
 ## 🧪 Tests
 
-Run integration tests:
+Run the integration tests using the following command: `pnpm test`
 
-```bash
-pnpm test
-```
+Test User Credentials
 
-### During tests:
-
-Auto-creates admin user:
+> During testing, an admin user is automatically created and available for immediate login (no seeding required):
 
 - **email:** test@gmail.com
 - **password:** test1234
 
-Tests auth, users, and RBAC.
+The tests cover: **_authentication_**, **_user management_**, and **_RBAC_**. Database connections are properly closed after the tests complete.
 
-Database connection closes automatically after tests.
+✨ Features
 
-> **Note:** After tests, you can log in with the auto-created admin — no manual DB seeding needed.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
-
-## ✨ Features
-
-- ✅ JWT auth (HTTP-only cookies)
-- ✅ RBAC (admin/user)
-- ✅ RESTful API with validation
-- ✅ Jest + Supertest integration tests
-- ✅ Auto-created admin for testing
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
-
-<!-- MARKDOWN LINKS & IMAGES -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/emreaaga/fullstack-admin-dashboard.svg?style=for-the-badge
-[contributors-url]: https://github.com/emreaaga/fullstack-admin-dashboard/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/emreaaga/fullstack-admin-dashboard.svg?style=for-the-badge
-[forks-url]: https://github.com/emreaaga/fullstack-admin-dashboard/network/members
-[stars-shield]: https://img.shields.io/github/stars/emreaaga/fullstack-admin-dashboard.svg?style=for-the-badge
-[stars-url]: https://github.com/emreaaga/fullstack-admin-dashboard/stargazers
-[issues-shield]: https://img.shields.io/github/issues/emreaaga/fullstack-admin-dashboard.svg?style=for-the-badge
-[issues-url]: https://github.com/emreaaga/fullstack-admin-dashboard/issues
-[license-shield]: https://img.shields.io/github/license/emreaaga/fullstack-admin-dashboard.svg?style=for-the-badge
-[license-url]: https://github.com/emreaaga/fullstack-admin-dashboard/blob/master/LICENSE.txt
-[Node.js]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white
-[Node-url]: https://nodejs.org/
-[Next.js]: https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[Postgres]: https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
-[Postgres-url]: https://www.postgresql.org/
-[Tailwind]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
-[Tailwind-url]: https://tailwindcss.com/
+- JWT Authentication (via HTTP-only cookies)
+- Role-Based Access Control (admin/user)
+- REST API with Zod validation
+- Security Middleware: Helmet, CORS, rate-limit, compression
+- Integration Tests (Jest + Supertest)
+- Auto-Admin Creation after running pnpm test

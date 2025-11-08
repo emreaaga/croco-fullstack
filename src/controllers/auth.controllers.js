@@ -5,7 +5,7 @@ import { setAuthCookies, clearAuthCookies } from '../utils/cookie.js';
  * Register a new user account.
  */
 export const register = async (request, response) => {
-  const result = await authService.register(request?.validatedData);
+  const result = await authService.register(request.validatedData);
 
   return response.status(201).json({
     success: true,

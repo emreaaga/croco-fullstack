@@ -26,6 +26,6 @@ export const getApps = async (request, response) => {
  * Delete an application by its ID.
  */
 export const deleteApp = async (request, response) => {
-  await applicationService.delete(Number(request.params.id));
+  await applicationService.delete(request.paramsId);
   return response.status(200).json({ success: true, message: 'Deleted successfully.' });
 };

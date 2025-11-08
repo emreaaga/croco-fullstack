@@ -4,7 +4,7 @@ import { userService } from '../services/index.js';
  * Get paginated list of users.
  */
 export const getUsers = async (request, response) => {
-  const { data, pagination } = await userService.getAll(request?.validatedData);
+  const { data, pagination } = await userService.getAll(request.validatedData);
   return response.status(200).json({
     success: true,
     data,
@@ -16,7 +16,7 @@ export const getUsers = async (request, response) => {
  * Change a user's status by ID.
  */
 export const updateUserStatus = async (request, response) => {
-  await userService.updateStatus(request?.validatedData?.status, Number(request.params?.id));
+  await userService.updateStatus(request.validatedData.status, request.paramsId);
   return response.status(200).json({ success: true, message: 'User status updated successfully.' });
 };
 
@@ -24,6 +24,6 @@ export const updateUserStatus = async (request, response) => {
  * Delete a user by ID.
  */
 export const deleteUser = async (request, response) => {
-  await userService.delete(Number(request.params.id));
+  await userService.delete(request.paramsId);
   return response.status(200).json({ success: true, message: 'Deleted successfully.' });
 };

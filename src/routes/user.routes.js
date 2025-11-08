@@ -1,25 +1,34 @@
 import { Router } from 'express';
 import { getUsers, updateUserStatus, deleteUser } from '../controllers/user.controolers.js';
-import { authMiddleware, handleValidate, isAdminMiddleware } from '../middlewares/index.js';
-import { PaginateValidation, UserPatchSchema } from '../validations/index.js';
+import {
+  authMiddleware,
+  validateBody,
+  validateQuery,
+  validateParams,
+  isAdminMiddleware,
+} from '../middlewares/index.js';
+import {
+  PaginateValidation,
+  UserPatchSchema,
+  paramValidationSchema,
+} from '../validations/index.js';
 
 const router = Router();
-router.get(
-  '/',
-  authMiddleware,
-  isAdminMiddleware,
-  handleValidate(PaginateValidation, true),
-  getUsers
-);
-//VALIDATE!
+router.get('/', authMiddleware, isAdminMiddleware, validateQuery(PaginateValidation), getUsers);
 router.patch(
   '/:id',
   authMiddleware,
   isAdminMiddleware,
-  handleValidate(UserPatchSchema),
+  validateParams(paramValidationSchema),
+  validateBody(UserPatchSchema),
   updateUserStatus
 );
-//VALIDATE!
-router.delete('/:id', authMiddleware, isAdminMiddleware, deleteUser);
+router.delete(
+  '/:id',
+  authMiddleware,
+  isAdminMiddleware,
+  validateParams(paramValidationSchema),
+  deleteUser
+);
 
 export default router;

@@ -9,7 +9,7 @@ import {
   verifyEmail,
   refreshToken,
 } from '../controllers/auth.controllers.js';
-import { handleValidate, authMiddleware } from '../middlewares/index.js';
+import { authMiddleware, validateBody } from '../middlewares/index.js';
 import { RegisterSchema, LoginSchema, ChangePasswordSchema } from '../validations/index.js';
 import {
   emailLimiter,
@@ -21,15 +21,15 @@ import {
 
 const router = Router();
 
-router.post('/register', registerLimiter, handleValidate(RegisterSchema), register);
-router.post('/login', loginLimiter, handleValidate(LoginSchema), login);
+router.post('/register', registerLimiter, validateBody(RegisterSchema), register);
+router.post('/login', loginLimiter, validateBody(LoginSchema), login);
 router.get('/me', authMiddleware, getMe);
 router.post('/logout', authMiddleware, logout);
 router.post(
   '/change-password',
   changePasswordLimiter,
   authMiddleware,
-  handleValidate(ChangePasswordSchema),
+  validateBody(ChangePasswordSchema),
   changePassword
 );
 router.post('/send-verification', emailLimiter, authMiddleware, sendVerification);

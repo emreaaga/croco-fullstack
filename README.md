@@ -96,7 +96,7 @@ Test User Credentials
 
 The tests cover: **_authentication_**, **_user management_**, and **_RBAC_**. Database connections are properly closed after the tests complete.
 
-✨ Features
+## ✨ Features
 
 - JWT Authentication (via HTTP-only cookies)
 - Role-Based Access Control (admin/user)

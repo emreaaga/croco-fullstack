@@ -10,7 +10,7 @@ export const validateParams = validateSchema => {
       return response.status(400).json({ success: false, code: 'VALIDATION_ERROR', message });
     }
 
-    request.validatedData = result.data;
+    request.paramsId = result.data.id;
     next();
   };
 };

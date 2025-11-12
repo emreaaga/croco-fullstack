@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import {
   getCoreRowModel,
   getPaginationRowModel,
@@ -12,14 +11,13 @@ import {
 } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
-import { api } from "@/lib/axios";
+import { api } from "@/lib/api";
 import { createColumns, User } from "./columns";
 
 export default function UsersPage() {
   const [users, setUsers] = React.useState<User[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const router = useRouter();
 
   const handleStatusChange = async (id: number, status: "approved" | "rejected") => {
     try {
@@ -33,7 +31,7 @@ export default function UsersPage() {
       }
     } catch (err: any) {
       toast.error("Ошибка при загрузке пользователей.");
-      router.replace("/auth/login");
+      console.error("Ошибка:", err);
     }
   };
 
@@ -43,21 +41,21 @@ export default function UsersPage() {
         setLoading(true);
         const res = await api.get("/users");
 
-        if (res.data.success) setUsers(res.data.data);
-      } catch (err: any) {
-        if (err.response?.status === 401) {
-          toast.info("Сессия истекла. Войдите снова.");
-          router.replace("/auth/login");
+        if (res.data.success) {
+          setUsers(res.data.data);
         } else {
-          console.error("Ошибка запроса:", err);
+          toast.error("Не удалось загрузить пользователей");
         }
+      } catch (err: any) {
+        toast.error("Ошибка при загрузке пользователей");
+        console.error("Ошибка запроса:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUsers();
-  }, [router]);
+  }, []); 
 
   const table = useReactTable({
     data: users,

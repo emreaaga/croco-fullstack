@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import {
   ColumnFiltersState,
   SortingState,
@@ -24,14 +23,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { api } from "@/lib/axios";
+import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { columns, Application } from "./columns";
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = React.useState<Application[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const router = useRouter();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -43,18 +41,16 @@ export default function ApplicationsPage() {
       try {
         setLoading(true);
         const res = await api.get("/applications");
+
         if (res.data.success) {
           setApplications(res.data.data);
         } else {
+          toast.error("Ошибка при получении данных");
           console.error("Ошибка при получении данных:", res.data);
         }
       } catch (err: any) {
-        if (err.response?.status === 401) {
-          toast.info("Сессия истекла. Войдите снова.");
-          router.replace("/auth/login");
-        } else {
-          console.error("Ошибка запроса:", err);
-        }
+        toast.error("Произошла ошибка. Попробуйте позже.");
+        console.error("Ошибка запроса:", err);
       } finally {
         setLoading(false);
       }

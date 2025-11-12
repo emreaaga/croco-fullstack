@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/axios";
+import { api } from "@/lib/api";
 import React from "react";
 
 const FormSchema = z.object({
@@ -41,11 +41,11 @@ export function LoginForm() {
         password: data.password,
       });
       router.replace("/dashboard/default");
-      setIsLoading(false);
       toast.success("Успешный вход!");
     } catch (error: any) {
-      setIsLoading(false);
       toast.error(error.response?.data?.message || "Произошла ошибка. Повторите позже!");
+    } finally {
+      setIsLoading(false);
     }
   };
 

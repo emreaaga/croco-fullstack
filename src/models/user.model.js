@@ -4,7 +4,7 @@ export const userStatusEnum = pgEnum('user_status', ['pending', 'approved', 'rej
 export const userRolesEnum = pgEnum('roles', ['user', 'admin']);
 
 export const UserTable = pgTable('user', {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: integer().primaryKey().generatedByDefaultAsIdentity(),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   password: text('password').notNull(),

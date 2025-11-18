@@ -2,7 +2,13 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, EllipsisVertical } from "lucide-react";
+import {
+  ArrowUpDown,
+  Ban,
+  CircleCheck,
+  EllipsisVertical,
+  Trash2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +25,9 @@ export type User = {
   createdAt: string;
 };
 
-export const createColumns = (handleStatusChange: (id: number, status: "approved" | "rejected") => void): ColumnDef<User>[] => [
+export const createColumns = (
+  handleStatusChange: (id: number, status: "approved" | "rejected") => void,
+): ColumnDef<User>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -47,9 +55,7 @@ export const createColumns = (handleStatusChange: (id: number, status: "approved
             ? "text-yellow-600 bg-yellow-50 border border-yellow-200"
             : "text-red-600 bg-red-50 border border-red-200";
 
-      return (
-        <span className={`rounded-md px-2 py-1 text-xs font-medium capitalize ${color}`}>{status as string}</span>
-      );
+      return <span className={`rounded-md px-2 py-1 text-xs font-medium capitalize ${color}`}>{status as string}</span>;
     },
   },
   {
@@ -73,31 +79,44 @@ export const createColumns = (handleStatusChange: (id: number, status: "approved
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-muted-foreground flex size-8">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground flex size-8">
               <EllipsisVertical />
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.email)}>
-              Копировать email
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+          <DropdownMenuContent align="end" className="w-40">
             {user.status === "pending" && (
-              <DropdownMenuItem className="text-emerald-600" onClick={() => handleStatusChange(user.id, "approved")}>
-                Одобрить
-              </DropdownMenuItem>
+              <>
+                <DropdownMenuItem className="text-emerald-600" onClick={() => handleStatusChange(user.id, "approved")}>
+                  <CircleCheck className="mr-2 h-4 w-4 stroke-[2.25]" />
+                  Одобрить
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-red-600" onClick={() => handleStatusChange(user.id, "rejected")}>
+                  <Ban className="mr-2 h-4 w-4 stroke-[1.75] text-red-400" />
+                  Отклонить
+                </DropdownMenuItem>
+              </>
             )}
             {user.status === "approved" && (
               <DropdownMenuItem className="text-red-600" onClick={() => handleStatusChange(user.id, "rejected")}>
+                <Ban className="mr-2 h-4 w-4 stroke-[1.75] text-red-400" />
                 Отклонить
               </DropdownMenuItem>
             )}
             {user.status === "rejected" && (
               <DropdownMenuItem className="text-emerald-600" onClick={() => handleStatusChange(user.id, "approved")}>
+                <CircleCheck className="mr-2 h-4 w-4 stroke-[2.25]" />
                 Одобрить
               </DropdownMenuItem>
             )}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="font-medium text-red-600 hover:bg-red-50 focus:bg-red-50"
+              onClick={() => navigator.clipboard.writeText(user.email)}
+            >
+              <Trash2 className="mr-2 h-4 w-4 stroke-[2.25] text-red-600" />
+              Удалить
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

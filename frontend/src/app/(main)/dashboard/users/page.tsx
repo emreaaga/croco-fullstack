@@ -30,8 +30,8 @@ export default function UsersPage() {
         toast.error("Не удалось обновить статус.");
       }
     } catch (err: any) {
-      toast.error("Ошибка при загрузке пользователей.");
-      console.error("Ошибка:", err);
+      const message = err.response?.data?.message || "Не удалось обновить статус.";
+      toast.error(message);
     }
   };
 
@@ -43,11 +43,11 @@ export default function UsersPage() {
         toast.success("Пользователь удален.");
         setUsers((prev) => prev.filter((u) => u.id !== id));
       } else {
-        toast.error("Не удалось обновить статус.");
+        toast.error("Не удалось удалить пользователя.");
       }
     } catch (err: any) {
-      toast.error("Ошибка при загрузке пользователей.");
-      console.error("Ошибка:", err);
+      const message = err.response?.data?.message || "Не удалось удалить пользователя.";
+      toast.error(message);
     }
   };
 

@@ -35,6 +35,22 @@ export default function UsersPage() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      const res = await api.delete(`/users/${id}`);
+
+      if (res.data.success) {
+        toast.success("Пользователь удален.");
+        setUsers((prev) => prev.filter((u) => u.id !== id));
+      } else {
+        toast.error("Не удалось обновить статус.");
+      }
+    } catch (err: any) {
+      toast.error("Ошибка при загрузке пользователей.");
+      console.error("Ошибка:", err);
+    }
+  };
+
   React.useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -55,11 +71,11 @@ export default function UsersPage() {
     };
 
     fetchUsers();
-  }, []); 
+  }, []);
 
   const table = useReactTable({
     data: users,
-    columns: createColumns(handleStatusChange),
+    columns: createColumns(handleStatusChange, handleDelete),
     state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),

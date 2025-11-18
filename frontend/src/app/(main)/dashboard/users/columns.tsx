@@ -2,13 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowUpDown,
-  Ban,
-  CircleCheck,
-  EllipsisVertical,
-  Trash2,
-} from "lucide-react";
+import { ArrowUpDown, Ban, CircleCheck, EllipsisVertical, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +21,7 @@ export type User = {
 
 export const createColumns = (
   handleStatusChange: (id: number, status: "approved" | "rejected") => void,
+  handleDelete: (id: number) => void,
 ): ColumnDef<User>[] => [
   {
     accessorKey: "name",
@@ -50,10 +45,10 @@ export const createColumns = (
       const status = row.getValue("status");
       const color =
         status === "approved"
-          ? "text-emerald-600 bg-emerald-50 border border-emerald-200"
+          ? "text-emerald-700 bg-emerald-100 border border-none"
           : status === "pending"
-            ? "text-yellow-600 bg-yellow-50 border border-yellow-200"
-            : "text-red-600 bg-red-50 border border-red-200";
+            ? "text-yellow-700 bg-yellow-100 border border-none"
+            : "text-red-700 bg-red-100 border border-none";
 
       return <span className={`rounded-md px-2 py-1 text-xs font-medium capitalize ${color}`}>{status as string}</span>;
     },
@@ -112,7 +107,7 @@ export const createColumns = (
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="font-medium text-red-600 hover:bg-red-50 focus:bg-red-50"
-              onClick={() => navigator.clipboard.writeText(user.email)}
+              onClick={() => handleDelete(user.id)}
             >
               <Trash2 className="mr-2 h-4 w-4 stroke-[2.25] text-red-600" />
               Удалить

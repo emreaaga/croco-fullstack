@@ -24,6 +24,6 @@ export const updateUserStatus = async (request, response) => {
  * Delete a user by ID.
  */
 export const deleteUser = async (request, response) => {
-  await userService.delete(request.paramsId);
+  await userService.delete(request.paramsId, request.userRole);
   return response.status(200).json({ success: true, message: 'Deleted successfully.' });
 };

@@ -46,11 +46,16 @@ class UserService {
   /**
    * Delete a user by ID.
    * @async
-   * @param {number} userId - User id
-   * @throws {BadRequestError} If the user not found
+   * @param {number} userId - Id of the user to delete
+   * @param {string} userRole - Role of the user performing the deletion
+   * @throws {BadRequestError} If the target user does not exist
+   * @throws {BadRequestError} If the deleting user has the same role as the target user
    * @returns {Promise<void>}
    */
-  async delete(userId) {
+  async delete(userId, userRole) {
+    const [user] = await userRepository.findById(userId);
+    if (!user) throw new BadRequestError('User not found.');
+    if (userRole === user.role) throw new BadRequestError('Admin cant delete admin.');
     const result = await userRepository.deleteOne(userId);
     if (!result) throw new BadRequestError('User not found.');
   }

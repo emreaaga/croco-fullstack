@@ -4,13 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Loader2 } from "lucide-react";
+import { EyeOff, Eye, Mail, User, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
 import React from "react";
+import { Spinner } from "@/components/ui/spinner";
+
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 const FormSchema = z
   .object({
@@ -34,11 +36,15 @@ export function RegisterForm() {
       confirmPassword: "",
     },
   });
+
   const [isLoading, setIsLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirm, setShowConfirm] = React.useState(false);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       setIsLoading(true);
+
       await api.post("/auth/register", {
         name: data.name,
         email: data.email,
@@ -48,11 +54,7 @@ export function RegisterForm() {
       toast.success("Регистрация прошла успешно, ожидайте одобрения модератора!");
       form.reset();
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Произошла ошибка при регистрации. Попробуйте снова.");
-      }
+      toast.error(error.response?.data?.message || "Произошла ошибка при регистрации. Попробуйте снова.");
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +70,12 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Имя</FormLabel>
               <FormControl>
-                <Input id="name" type="text" placeholder="Введите ваше имя" autoComplete="name" {...field} />
+                <InputGroup>
+                  <InputGroupInput type="text" placeholder="Введите ваше имя" autoComplete="name" {...field} />
+                  <InputGroupAddon>
+                    <User className="h-4 w-4" />
+                  </InputGroupAddon>
+                </InputGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,7 +89,12 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input id="email" type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                <InputGroup>
+                  <InputGroupInput type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                  <InputGroupAddon>
+                    <Mail className="h-4 w-4" />
+                  </InputGroupAddon>
+                </InputGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +108,26 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Пароль</FormLabel>
               <FormControl>
-                <Input id="password" type="password" placeholder="••••••••" autoComplete="new-password" {...field} />
+                <InputGroup>
+                  <InputGroupInput
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+
+                  <InputGroupAddon>
+                    <Lock className="h-4 w-4" />
+                  </InputGroupAddon>
+
+                  <InputGroupAddon className="cursor-pointer" align="inline-end">
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" onClick={() => setShowPassword(false)} />
+                    ) : (
+                      <Eye className="h-4 w-4" onClick={() => setShowPassword(true)} />
+                    )}
+                  </InputGroupAddon>
+                </InputGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,13 +141,26 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Подтвердите пароль</FormLabel>
               <FormControl>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <InputGroup>
+                  <InputGroupInput
+                    type={showConfirm ? "text" : "password"}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+
+                  <InputGroupAddon>
+                    <Lock className="h-4 w-4" />
+                  </InputGroupAddon>
+
+                  <InputGroupAddon className="cursor-pointer" align="inline-end">
+                    {showConfirm ? (
+                      <EyeOff className="h-4 w-4" onClick={() => setShowConfirm(false)} />
+                    ) : (
+                      <Eye className="h-4 w-4" onClick={() => setShowConfirm(true)} />
+                    )}
+                  </InputGroupAddon>
+                </InputGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -126,7 +170,7 @@ export function RegisterForm() {
         <Button className="w-full bg-emerald-600 text-white hover:bg-emerald-700" type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Spinner className="mr-2 h-4 w-4" />
               Регистрация...
             </>
           ) : (

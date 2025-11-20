@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -11,6 +10,9 @@ import { useUser } from "@/config/user-context";
 import { Pencil, Save, X, MailCheck, MailWarning, Loader2 } from "lucide-react";
 import { apiServer } from "@/lib/api-server";
 import { toast } from "sonner";
+
+import { User, Mail } from "lucide-react";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 export default function ProfilePage() {
   const user = useUser();
@@ -88,21 +90,29 @@ export default function ProfilePage() {
         <Separator />
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <div className="space-y-2">
+          <div className="flex min-h-[90px] flex-col justify-end space-y-2">
             <Label htmlFor="name">Имя</Label>
-            <Input
-              id="name"
-              type="text"
-              defaultValue={user?.name}
-              placeholder="Введите имя"
-              readOnly={!editMode}
-              className={!editMode ? "cursor-not-allowed opacity-70" : ""}
-            />
+
+            <InputGroup>
+              <InputGroupAddon>
+                <User className="text-muted-foreground h-4 w-4" />
+              </InputGroupAddon>
+
+              <InputGroupInput
+                id="name"
+                type="text"
+                defaultValue={user?.name}
+                placeholder="Введите имя"
+                readOnly={!editMode}
+                className={!editMode ? "cursor-not-allowed opacity-70" : ""}
+              />
+            </InputGroup>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex min-h-[90px] flex-col justify-end space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="email">Email</Label>
+
               {verified ? (
                 <Badge
                   variant="outline"
@@ -120,23 +130,26 @@ export default function ProfilePage() {
               )}
             </div>
 
-            <Input
-              id="email"
-              type="email"
-              defaultValue={user?.email}
-              placeholder="user@example.com"
-              readOnly={!editMode}
-              className={!editMode ? "cursor-not-allowed opacity-70" : ""}
-            />
+            <InputGroup>
+              <InputGroupAddon>
+                <Mail className="text-muted-foreground h-4 w-4" />
+              </InputGroupAddon>
+
+              <InputGroupInput
+                id="email"
+                type="email"
+                defaultValue={user?.email}
+                placeholder="user@example.com"
+                readOnly={!editMode}
+                className={!editMode ? "cursor-not-allowed opacity-70" : ""}
+              />
+            </InputGroup>
 
             {!verified && (
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs">Подтвердите почту.</p>
-                <Button size="sm" variant="secondary" onClick={handleVerify} disabled={verifying} className="text-xs">
-                  {verifying ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : null}
-                  {verifying ? "Отправка..." : "Отправить письмо"}
-                </Button>
-              </div>
+              <Button size="sm" variant="secondary" onClick={handleVerify} disabled={verifying} className="text-xs">
+                {verifying ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : null}
+                {verifying ? "Отправка..." : "Отправить письмо"}
+              </Button>
             )}
           </div>
         </div>

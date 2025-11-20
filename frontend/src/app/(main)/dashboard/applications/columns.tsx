@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, EllipsisVertical } from "lucide-react";
+import { ArrowUpDown, EllipsisVertical, Copy, ExternalLink } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,16 +33,17 @@ export const columns: ColumnDef<Application>[] = [
   {
     accessorKey: "siteUrl",
     header: "Сайт",
-    cell: ({ row }) => (
-      <a
-        href={row.getValue("siteUrl")}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600 hover:underline"
-      >
-        {row.getValue("siteUrl")}
-      </a>
-    ),
+    cell: ({ row }) => {
+      const url: string = row.getValue("siteUrl");
+      const maxLength = 20;
+      const displayUrl = url.length > maxLength ? url.slice(0, maxLength) + "..." : url;
+
+      return (
+        <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline" title={url}>
+          {displayUrl}
+        </a>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -72,6 +73,7 @@ export const columns: ColumnDef<Application>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const app = row.original;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -84,11 +86,17 @@ export const columns: ColumnDef<Application>[] = [
               <span className="sr-only">Open menu</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+
+          <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(app.email)}>
+              <Copy className="mr-2 h-4 w-4" />
               Копировать email
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => window.open(app.siteUrl, "_blank")}>Перейти на сайт</DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => window.open(app.siteUrl, "_blank")}>
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Перейти на сайт
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

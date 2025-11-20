@@ -13,11 +13,37 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { createColumns, User } from "./columns";
+import { useUser } from "@/config/user-context";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Lock } from "lucide-react";
 
 export default function UsersPage() {
+  const user = useUser();
+
   const [users, setUsers] = React.useState<User[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  if (!user) {
+    return <div className="text-muted-foreground p-6 text-center">Загрузка...</div>;
+  }
+
+  if (user.role !== "admin") {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 p-10 text-center">
+        <Lock className="text-destructive size-12" />
+
+        <h2 className="text-2xl font-semibold">Доступ запрещён</h2>
+
+        <p className="text-muted-foreground max-w-md text-sm">У вас нет прав для просмотра этого раздела.</p>
+
+        <Button asChild variant="outline">
+          <Link href="/dashboard">Вернуться в панель</Link>
+        </Button>
+      </div>
+    );
+  }
 
   const handleStatusChange = async (id: number, status: "approved" | "rejected") => {
     try {

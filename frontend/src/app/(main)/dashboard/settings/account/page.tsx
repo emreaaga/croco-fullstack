@@ -5,16 +5,24 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, ShieldOff } from "lucide-react";
+import { Loader2, ShieldOff, Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { apiServer } from "@/lib/api-server";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 export default function AccountPage() {
   const [loading, setLoading] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleChangePassword = async () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
@@ -67,35 +75,77 @@ export default function AccountPage() {
           <div className="max-w-md space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="current-password">Текущий пароль</Label>
-              <Input
-                id="current-password"
-                type="password"
-                placeholder="••••••••"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-              />
+              <InputGroup>
+                <InputGroupInput
+                  id="current-password"
+                  type={showOld ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+
+                <InputGroupAddon>
+                  <Lock className="h-4 w-4" />
+                </InputGroupAddon>
+
+                <InputGroupAddon align="inline-end" className="cursor-pointer">
+                  {showOld ? (
+                    <EyeOff className="h-4 w-4" onClick={() => setShowOld(false)} />
+                  ) : (
+                    <Eye className="h-4 w-4" onClick={() => setShowOld(true)} />
+                  )}
+                </InputGroupAddon>
+              </InputGroup>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="new-password">Новый пароль</Label>
-              <Input
-                id="new-password"
-                type="password"
-                placeholder="Введите новый пароль"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
+              <InputGroup>
+                <InputGroupInput
+                  id="new-password"
+                  type={showNew ? "text" : "password"}
+                  placeholder="Введите новый пароль"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+
+                <InputGroupAddon>
+                  <Lock className="h-4 w-4" />
+                </InputGroupAddon>
+
+                <InputGroupAddon align="inline-end" className="cursor-pointer">
+                  {showNew ? (
+                    <EyeOff className="h-4 w-4" onClick={() => setShowNew(false)} />
+                  ) : (
+                    <Eye className="h-4 w-4" onClick={() => setShowNew(true)} />
+                  )}
+                </InputGroupAddon>
+              </InputGroup>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="confirm-password">Подтвердите пароль</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="Повторите новый пароль"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+              <InputGroup>
+                <InputGroupInput
+                  id="confirm-password"
+                  type={showConfirm ? "text" : "password"}
+                  placeholder="Повторите новый пароль"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+
+                <InputGroupAddon>
+                  <Lock className="h-4 w-4" />
+                </InputGroupAddon>
+
+                <InputGroupAddon align="inline-end" className="cursor-pointer">
+                  {showConfirm ? (
+                    <EyeOff className="h-4 w-4" onClick={() => setShowConfirm(false)} />
+                  ) : (
+                    <Eye className="h-4 w-4" onClick={() => setShowConfirm(true)} />
+                  )}
+                </InputGroupAddon>
+              </InputGroup>
             </div>
           </div>
 

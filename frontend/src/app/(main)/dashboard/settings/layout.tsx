@@ -21,7 +21,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
   const currentPage = sidebarNavItems.find((i) => i.href === pathname);
 
   return (
-    <div className="space-y-2 p-2 pb-8 md:p-3">
+    <div className="space-y-2 px-1 pb-8 md:px-2 md:pb-8">
       <div className="space-y-0.5">
         <h2 className="text-lg font-semibold tracking-tight md:text-xl">Настройки</h2>
         <p className="text-muted-foreground text-xs md:text-sm">
@@ -32,8 +32,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
       <Separator className="my-3" />
 
       <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:space-x-6">
-        <div className="w-full overflow-x-auto md:w-1/5 md:overflow-visible">
-          <nav className="flex gap-1 overflow-x-auto pb-2 md:flex-col md:gap-1 md:pb-0">
+        <div className="w-full overflow-x-auto md:w-30 md:overflow-visible">
+          <nav className="flex gap-1 pb-2 md:sticky md:top-20 md:-ml-6 md:flex-col md:items-start md:gap-1 md:pb-0">
             {sidebarNavItems.map((item) => {
               const active = pathname === item.href;
               const Icon = item.icon;
@@ -43,8 +43,9 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                   asChild
                   variant="ghost"
                   className={cn(
-                    "flex-shrink-0 justify-start px-2 py-1 text-xs whitespace-nowrap md:w-full md:text-sm",
-                    active && "bg-muted hover:bg-muted",
+                    "flex-shrink-0 justify-start px-2 py-1 text-xs whitespace-nowrap transition-colors md:w-full md:text-sm",
+                    "hover:bg-muted/50",
+                    active && "bg-muted hover:bg-muted border-l-2",
                   )}
                 >
                   <Link href={item.href} className="flex items-center gap-2">
@@ -57,9 +58,11 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           </nav>
         </div>
 
-        <div className="w-full flex-1 md:max-w-3xl">
-          <Card className="space-y-3 rounded-lg p-3 shadow-sm md:p-4">
-            <h3 className="text-base font-medium md:text-lg">{currentPage?.title}</h3>
+        <div className="w-full flex-1 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+          <Card className="bg-background rounded-lg border p-4 md:p-5">
+            <p className="text-muted-foreground text-xs md:text-sm">
+              Настройки / <span className="text-foreground">{currentPage?.title}</span>
+            </p>
             <Separator />
             {children}
           </Card>

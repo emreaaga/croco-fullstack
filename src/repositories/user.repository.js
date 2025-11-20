@@ -50,6 +50,7 @@ class UserRepository {
         name: UserTable.name,
         email: UserTable.email,
         status: UserTable.status,
+        role: UserTable.roles,
         createdAt: UserTable.createdAt,
         updatedAt: UserTable.updatedAt,
       })

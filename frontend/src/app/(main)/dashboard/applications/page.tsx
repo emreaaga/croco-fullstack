@@ -25,80 +25,111 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { columns, Application } from "./columns";
+import { columns as cols, Application } from "./columns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = React.useState<Application[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  const [emailFilter, setEmailFilter] = React.useState(""); 
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await api.get("/applications");
+  const fetchApplications = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/applications");
 
-        if (res.data.success) {
-          setApplications(res.data.data);
-        } else {
-          toast.error("Ошибка при получении данных");
-          console.error("Ошибка при получении данных:", res.data);
-        }
-      } catch (err: any) {
-        toast.error("Произошла ошибка. Попробуйте позже.");
-        console.error("Ошибка запроса:", err);
-      } finally {
-        setLoading(false);
+      if (res.data.success) {
+        setApplications(res.data.data);
+      } else {
+        toast.error("Ошибка при получении данных");
+        console.error("Ошибка при получении данных:", res.data);
       }
-    };
-    fetchData();
+    } catch (err: any) {
+      toast.error("Произошла ошибка. Попробуйте позже.");
+      console.error("Ошибка запроса:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  React.useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      table.getColumn("email")?.setFilterValue(emailFilter);
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [emailFilter]);
+
+  const memoColumns = React.useMemo(() => cols, []);
+  const memoData = React.useMemo(() => applications, [applications]);
+
   const table = useReactTable({
-    data: applications,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
+    data: memoData,
+    columns: memoColumns,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
     },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   if (loading) {
-    return <div className="text-muted-foreground p-4 text-center">Загрузка...</div>;
+    return (
+      <div className="rounded-md border p-4">
+        <Table>
+          <TableBody>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <TableRow key={i}>
+                {Array.from({ length: 6 }).map((_, j) => (
+                  <TableCell key={j}>
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
   }
 
   return (
     <div className="@container/main flex flex-col gap-4 md:gap-6">
+      {/* Top panel */}
       <div className="flex items-center py-4">
         <Input
           placeholder="Фильтр по email..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
+          value={emailFilter}
+          onChange={(e) => setEmailFilter(e.target.value)}
           className="max-w-sm"
         />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
               Колонки <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end">
             {table
-              .getAllColumns()
+              .getAllLeafColumns()
               .filter((column) => column.getCanHide())
               .map((column) => (
                 <DropdownMenuCheckboxItem
@@ -107,7 +138,7 @@ export default function ApplicationsPage() {
                   checked={column.getIsVisible()}
                   onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 >
-                  {column.id}
+                  {typeof column.columnDef.header === "string" ? column.columnDef.header : column.id}
                 </DropdownMenuCheckboxItem>
               ))}
           </DropdownMenuContent>
@@ -117,9 +148,9 @@ export default function ApplicationsPage() {
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+            {table.getHeaderGroups().map((hg) => (
+              <TableRow key={hg.id}>
+                {hg.headers.map((header) => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
@@ -127,10 +158,11 @@ export default function ApplicationsPage() {
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
-            {applications.length ? (
+            {memoData.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
@@ -138,8 +170,8 @@ export default function ApplicationsPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Нет данных.
+                <TableCell colSpan={memoColumns.length}>
+                  <div className="text-muted-foreground py-10 text-center text-sm">Нет заявок 🥲</div>
                 </TableCell>
               </TableRow>
             )}
@@ -148,9 +180,8 @@ export default function ApplicationsPage() {
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} из {table.getFilteredRowModel().rows.length} выбрано.
-        </div>
+        <div className="text-muted-foreground flex-1 text-sm">{table.getRowModel().rows.length} заявок найдено.</div>
+
         <div className="space-x-2">
           <Button
             variant="outline"
